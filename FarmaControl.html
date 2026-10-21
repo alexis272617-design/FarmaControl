@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FarmaControl</title>
+<style>
+:root{color-scheme:light dark;--bg:#edf2ef;--pn:#fff;--ink:#14282a;--mu:#5d706c;--ln:#d3dfd9;--gr:#1f6b52;--on:#fff;--am:#8a5a00;--amb:#fbefcf;--rd:#a93a2a;--rdb:#f8e2dd;--ok:#e0f1e7;--sb:#10342c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1918;--pn:#14272a;--ink:#e3eeea;--mu:#8fa6a1;--ln:#294143;--gr:#5cc0a0;--on:#08201a;--am:#e7b84a;--amb:#3a2f12;--rd:#f09a8a;--rdb:#3d1f1a;--ok:#173a2f;--sb:#0a1f1b}}
+:root[data-theme="dark"]{--bg:#0d1918;--pn:#14272a;--ink:#e3eeea;--mu:#8fa6a1;--ln:#294143;--gr:#5cc0a0;--on:#08201a;--am:#e7b84a;--amb:#3a2f12;--rd:#f09a8a;--rdb:#3d1f1a;--ok:#173a2f;--sb:#0a1f1b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-weight:600;margin:0}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+nav{background:var(--sb);color:#e6f2ee;padding:20px 12px;display:flex;flex-direction:column;gap:3px}
+.brand{padding:0 8px 16px}.brand b{display:block;font:600 24px Georgia,serif}.brand span{font-size:13px;opacity:.75}
+nav button{text-align:left;background:none;border:0;color:inherit;padding:10px 12px;border-radius:7px;font:inherit;cursor:pointer}
+nav button:hover{background:#ffffff18}nav button.cur{background:#ffffff26;font-weight:600}
+.who{margin-top:auto;padding:12px 8px 0;border-top:1px solid #ffffff22;font-size:13px}.who span{display:block;opacity:.75}
+main{padding:24px clamp(14px,3vw,36px);max-width:1080px;width:100%}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.top h1{font-size:28px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.k{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:14px;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.k:hover{border-color:var(--gr)}.k small{color:var(--mu);display:block}.k b{font:600 24px Georgia,serif;font-variant-numeric:tabular-nums}
+.k.w b{color:var(--am)}
+.g2{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+.sheet{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:16px;margin-bottom:12px}
+.sheet h2{font-size:19px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{text-align:left;font-weight:600;color:var(--mu);font-size:13px;border-bottom:2px solid var(--gr);padding:6px}
+td{padding:8px 6px;border-bottom:1px solid var(--ln)}.r{text-align:right}.wrap{overflow-x:auto}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+label{display:flex;flex-direction:column;font-size:13px;color:var(--mu);gap:3px}
+input,select,textarea{font:inherit;padding:8px 9px;border:1px solid var(--ln);border-radius:6px;background:var(--bg);color:var(--ink);min-width:0}
+button.b{font:inherit;padding:8px 15px;border-radius:6px;border:1px solid var(--gr);background:var(--gr);color:var(--on);cursor:pointer}
+button.b.o{background:none;color:var(--gr)}button:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--am);outline-offset:1px}
+.msg{padding:10px 12px;border-radius:7px;margin:0 0 12px}.msg.ok{background:var(--ok);color:var(--gr)}.msg.bad{background:var(--rdb);color:var(--rd)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:14px}
+.card .ch{display:flex;justify-content:space-between;gap:6px}.card .ch span{color:var(--mu);font-size:13px}
+.card .pr{font:600 20px Georgia,serif;margin:6px 0}
+.bar{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--gr)}.bar.low i{background:var(--am)}
+.low{color:var(--am);background:var(--amb);padding:1px 8px;border-radius:99px;font-size:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chips button{border:1px solid var(--ln);background:none;color:var(--ink);border-radius:99px;padding:5px 12px;font:inherit;cursor:pointer}.chips button.cur{background:var(--gr);border-color:var(--gr);color:var(--on)}
+.drop{border:2px dashed var(--ln);border-radius:10px;padding:22px;text-align:center;color:var(--mu);cursor:pointer}.drop.hot{border-color:var(--gr);background:var(--ok)}
+.off{color:var(--mu)}.bad{color:var(--rd)}.okc{color:var(--gr)}
+.login{max-width:380px;margin:8vh auto}
+details{margin-top:14px;border-top:1px dashed var(--ln);padding-top:10px;color:var(--mu);font-size:14px}summary{cursor:pointer}details li{margin:3px 0}details code{color:var(--ink)}.pend{color:var(--am)}
+svg text{fill:var(--ink);font-size:12px}
+.dev{background:var(--amb);color:var(--am);padding:8px 14px;font-size:13px;text-align:center}
+@media (max-width:820px){.app{grid-template-columns:1fr}nav{flex-direction:row;overflow-x:auto;align-items:center}.brand{padding:0 10px 0 0}nav button{white-space:nowrap}.who{display:none}.g2{grid-template-columns:1fr}}
+</style></head><body>
+<div class="dev">Versión en desarrollo: el modelo aún no está completo y se actualiza a medida que avanza el código en Java. Última actualización: 21/10/2026.</div>
+<div class="app"><nav id="nav"></nav><main id="main"></main></div>
+<script>
+const ROLES={maryibi:{k:'1234',rol:'Administrador',nom:'Maryibi Arango',p:{cat:1,fac:1,inv:1,caja:1}},caja1:{k:'1234',rol:'Cajero',nom:'Cajero de la caja 1',p:{cat:0,fac:1,inv:0,caja:1}}};
+const fmt=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hoy=()=>new Date().toLocaleDateString('es-CO');
+const seed=()=>({caja:200000,abierto:false,user:null,tab:'panel',q:'',f:'todos',dv:[],dc:[],imp:[],msg:null,facturas:[],compras:[],mov:[],
+ productos:[{c:'P001',n:'Acetaminofén 500 mg',p:2000,s:10},{c:'P002',n:'Ibuprofeno 400 mg',p:2500,s:4},{c:'P003',n:'Suero oral',p:3500,s:25},{c:'P004',n:'Loratadina 10 mg',p:1800,s:3}],
+ clientes:[{c:'1117',n:'Ana Rojas',t:'3100000000'},{c:'1118',n:'Luis Perdomo',t:'3110000000'}],proveedores:[{c:'D01',n:'Depósito Amazonas',t:'3200000000'}]});
+let S;try{S=JSON.parse(localStorage.getItem('fc2'))}catch(e){}
+if(!S||!S.productos)S=seed();S.msg=null;
+const g=id=>document.getElementById(id).value.trim();
+const P=c=>S.productos.find(x=>x.c===c),C=c=>S.clientes.find(x=>x.c===c),D=c=>S.proveedores.find(x=>x.c===c);
+const can=p=>S.user&&ROLES[S.user].p[p];
+const say=(ok,t)=>{S.msg={ok,t};R()};
+const mov=(t,c,m)=>S.mov.unshift({n:S.mov.length+1,f:hoy(),t,c,m});
+const saldo=c=>c.deuda.ini-c.deuda.ab.reduce((a,b)=>a+b.m,0);
+const need=(p,m)=>{if(!can(p)){say(false,'Tu rol ('+ROLES[S.user].rol+') no permite '+m+'.');return false}return true};
+const opt=(l,t)=>l.map(x=>`<option value="${esc(x.c)}">${esc(t(x))}</option>`).join('');
+const tbl=(h,rows)=>`<div class="wrap"><table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.join('')||`<tr><td colspan="${h.length}" class="off">Aún no hay registros.</td></tr>`}</table></div>`;
+const go=t=>{S.tab=t;S.msg=null;R()};
+function entrar(){const u=ROLES[g('u')];if(!u||u.k!==document.getElementById('k').value)return say(false,'Usuario o clave incorrectos.');S.user=g('u');S.abierto=true;S.tab='panel';say(true,'Negocio abierto por '+u.nom+' ('+u.rol+').')}
+function cerrar(){if(!need('caja','cerrar la caja'))return;S.abierto=false;S.user=null;S.msg={ok:true,t:'Negocio cerrado. Caja final: '+fmt(S.caja)+'.'};R()}
+function addProd(){if(!need('cat','gestionar el catálogo'))return;const r=chk({c:g('pc'),n:g('pn'),p:+g('pp'),s:+g('ps')},[]);if(r)return say(false,r);S.productos.push({c:g('pc'),n:g('pn'),p:+g('pp'),s:+g('ps')});say(true,'Producto registrado.')}
+function chk(x,extra){if(!x.c||!x.n)return'Código y nombre son obligatorios.';if(!(x.p>0))return'Precio mayor que cero.';if(!Number.isInteger(x.s)||x.s<0)return'Stock entero desde cero.';if(P(x.c)||extra.includes(x.c))return'Código repetido.';return''}
+function leer(t){const seen=[];S.imp=t.split(/\r?\n/).filter(l=>l.trim()).map(l=>{const a=l.split(/[;,\t]/).map(z=>z.trim());return{c:a[0]||'',n:a[1]||'',p:+(a[2]||'').replace(/[$.\s]/g,''),s:+(a[3]||''),raw:a}}).filter((x,i)=>!(i===0&&isNaN(x.p)));
+ S.imp.forEach(x=>{x.err=chk(x,seen);if(!x.err)seen.push(x.c)});say(true,S.imp.length+' filas leídas. Revisa la vista previa.')}
+function archivo(f){if(!f)return;const r=new FileReader();r.onload=()=>leer(String(r.result));r.readAsText(f)}
+function importar(){if(!need('cat','gestionar el catálogo'))return;const ok=S.imp.filter(x=>!x.err);ok.forEach(x=>S.productos.push({c:x.c,n:x.n,p:x.p,s:x.s}));S.imp=[];say(true,ok.length+' productos importados.')}
+function addCli(){if(!need('cat','registrar clientes'))return;const c=g('cc'),n=g('cn'),t=g('ct');if(!c||!n||!t)return say(false,'Cédula, nombre y teléfono son obligatorios.');if(C(c))return say(false,'Ya existe esa cédula.');S.clientes.push({c,n,t});say(true,'Cliente registrado.')}
+function delCli(c){if(!need('cat','eliminar clientes'))return;if(S.facturas.some(f=>f.cl===c))return say(false,'El cliente tiene facturas: no se puede eliminar.');S.clientes=S.clientes.filter(x=>x.c!==c);say(true,'Cliente eliminado.')}
+function addProv(){if(!need('inv','registrar proveedores'))return;const c=g('dc'),n=g('dn'),t=g('dt');if(!c||!n||!t)return say(false,'Código, nombre y teléfono son obligatorios.');if(D(c))return say(false,'Ya existe ese proveedor.');S.proveedores.push({c,n,t});say(true,'Proveedor registrado.')}
+function linea(k){const pr=P(g(k+'p')),q=+g(k+'q'),co=k==='c'?+g('ck'):0;if(!pr||!Number.isInteger(q)||q<=0||(k==='c'&&!(co>0)))return say(false,'Elige producto, cantidad y (en compras) costo mayores que cero.');S['d'+(k==='c'?'c':'v')].push({c:pr.c,q,k:co});say(true,'Línea agregada.')}
+function vaciar(k){S['d'+k]=[];say(true,'Lista vaciada.')}
+function comprar(){if(!need('inv','registrar compras'))return;const pv=D(g('cv')),cr=g('cm')==='credito';if(!pv||!S.dc.length)return say(false,'Elige proveedor y agrega al menos un producto.');
+ const lin=S.dc.map(l=>({n:P(l.c).n,c:l.c,q:l.q,k:l.k,sub:l.q*l.k})),t=lin.reduce((a,l)=>a+l.sub,0);
+ if(!cr&&t>S.caja)return say(false,'La caja no alcanza para pagar de contado '+fmt(t)+'.');
+ lin.forEach(l=>P(l.c).s+=l.q);const n=S.compras.length+1;S.compras.push({n,f:hoy(),pv:pv.n,lin,t,deuda:cr?{ini:t,ab:[]}:null});
+ if(!cr){mov('egreso','Compra '+n+' a '+pv.n,t);S.caja-=t}S.dc=[];say(true,'Compra '+n+(cr?' registrada a crédito.':' pagada de contado.'))}
+function pagar(n){if(!need('inv','pagar deudas'))return;const c=S.compras.find(x=>x.n===n),m=+g('ab'+n);
+ if(!(m>0))return say(false,'El abono debe ser mayor que cero.');if(m>saldo(c))return say(false,'El abono supera el saldo ('+fmt(saldo(c))+').');if(m>S.caja)return say(false,'La caja no alcanza.');
+ c.deuda.ab.push({n:c.deuda.ab.length+1,f:hoy(),m});mov('egreso','Abono compra '+n,m);S.caja-=m;say(true,'Abono registrado.')}
+function facturar(){if(!need('fac','facturar'))return;const cl=C(g('vc'));if(!cl)return say(false,'Elige un cliente.');if(!S.dv.length)return say(false,'Agrega al menos un producto.');
+ const nd={};S.dv.forEach(l=>nd[l.c]=(nd[l.c]||0)+l.q);
+ for(const c in nd){const p=P(c);if(nd[c]>p.s)return say(false,'Stock insuficiente de '+p.n+': hay '+p.s+', se piden '+nd[c]+'.')}
+ const lin=S.dv.map(l=>{const p=P(l.c);return{n:p.n,q:l.q,pv:p.p,sub:l.q*p.p}});for(const c in nd)P(c).s-=nd[c];
+ const t=lin.reduce((a,l)=>a+l.sub,0),n=S.facturas.length+1;S.facturas.push({n,f:hoy(),cl:cl.c,cn:cl.n,mp:g('vm'),lin,t});mov('ingreso','Venta factura '+n+' ('+g('vm')+')',t);S.caja+=t;S.dv=[];say(true,'Factura '+n+' emitida por '+fmt(t)+'.')}
+function reiniciar(){S=seed();R()}
+function barras(items,fmtv){const mx=Math.max(1,...items.map(i=>i.v)),h=items.length*30+6;
+ return `<svg viewBox="0 0 520 ${h}" width="100%" role="img">${items.map((i,k)=>`<g><title>${esc(i.l)}: ${fmtv(i.v)}</title><text x="0" y="${k*30+19}">${esc(i.l.slice(0,22))}</text><rect x="150" y="${k*30+6}" width="${Math.max(3,i.v/mx*300)}" height="20" rx="4" style="fill:${i.w?'var(--am)':'var(--gr)'}"/><text x="${156+Math.max(3,i.v/mx*300)}" y="${k*30+20}">${fmtv(i.v)}</text></g>`).join('')}</svg>`}
+const TABS=[['panel','Panel'],['productos','Productos'],['clientes','Clientes'],['proveedores','Proveedores'],['compras','Compras y deudas'],['ventas','Ventas']];
+const J={panel:['<code>InformacionDrogueria</code>: <code>darFondoCaja()</code>, <code>cerrarNegocio()</code>','<code>Usuario</code>: <code>validarCredenciales()</code>, <code>permitirCerrarCaja()</code> (<span class="pend">falta conectarlos con <code>abrirNegocio</code></span>)','<code>MovimientoFinanciero</code> con <code>TipoMovimiento</code> (<span class="pend">hoy no guarda el tipo</span>)'],
+productos:['<code>Producto</code>: <code>darCodigo()</code>, <code>darNombre()</code>, <code>darPrecioUnitario()</code>, <code>darStock()</code>','<code>InformacionDrogueria</code>: <code>registrarProducto()</code>, <code>buscarProducto()</code>, <code>buscarProductoPorNombre()</code>','<code>Usuario.permitirGestionarCatalogo()</code>: solo el Administrador sube productos'],
+clientes:['<code>Cliente</code>, <code>InformacionDrogueria.registrarCliente()</code>, <code>eliminarCliente()</code>, <code>clienteTieneFacturas()</code>'],
+proveedores:['<code>Proveedor</code>, <code>registrarProveedor()</code>, <code>buscarProveedor()</code>, <code>eliminarProveedor()</code>'],
+compras:['<code>Compra</code>, <code>DetalleCompra</code>, <code>registrarCompra(compra, aCredito)</code>','<code>Deuda.abonar()</code> y <code>Abono</code>; <span class="pend"><code>pagarDeuda()</code> falta</span>','<code>Usuario.permitirAjustarInventario()</code>'],
+ventas:['<code>Factura</code>, <code>DetalleFactura</code> (precio congelado), <code>MedioDePago</code>','<span class="pend"><code>registrarVenta()</code> con validación de stock: falta. Esta pantalla muestra cómo debe comportarse.</span>','<code>Usuario.permitirFacturarVenta()</code>']};
+const jv=t=>`<details><summary>Código Java detrás de esta pantalla</summary><ul>${J[t].map(x=>`<li>${x}</li>`).join('')}</ul></details>`;
+const lista=(k,rows,cols)=>tbl(cols,rows)+`<div class="row" style="margin-top:8px"><button class="b o" onclick="vaciar('${k}')">Vaciar lista</button></div>`;
+const V={
+panel:()=>{const ing=S.mov.filter(m=>m.t==='ingreso').reduce((a,m)=>a+m.m,0),eg=S.mov.filter(m=>m.t==='egreso').reduce((a,m)=>a+m.m,0),deu=S.compras.filter(c=>c.deuda).reduce((a,c)=>a+saldo(c),0),bajo=S.productos.filter(p=>p.s<=5).length;
+return `<div class="kp"><button class="k" onclick="go('ventas')"><small>Fondo de caja</small><b>${fmt(S.caja)}</b></button><button class="k" onclick="go('ventas')"><small>Ventas del día</small><b>${fmt(ing)}</b></button><button class="k" onclick="go('compras')"><small>Deuda con depósitos</small><b>${fmt(deu)}</b></button><button class="k ${bajo?'w':''}" onclick="S.f='bajo';go('productos')"><small>Productos con stock bajo</small><b>${bajo}</b></button></div>
+<div class="g2"><div class="sheet"><h2>Stock por producto</h2>${barras(S.productos.map(p=>({l:p.n,v:p.s,w:p.s<=5})),v=>v+' u.')}</div>
+<div class="sheet"><h2>Ingresos y egresos</h2>${barras([{l:'Ingresos',v:ing},{l:'Egresos',v:eg,w:1}],fmt)}<p class="off">Pasa el cursor sobre una barra para ver el valor.</p></div></div>
+<div class="sheet"><h2>Libro de movimientos</h2>${tbl(['N.º','Fecha','Tipo','Concepto','Monto'],S.mov.slice(0,8).map(m=>`<tr><td>${m.n}</td><td>${m.f}</td><td>${m.t}</td><td>${esc(m.c)}</td><td class="r ${m.t==='egreso'?'bad':'okc'}">${m.t==='egreso'?'−':'+'}${fmt(m.m)}</td></tr>`))}</div>`},
+productos:()=>{const q=S.q.toLowerCase(),l=S.productos.filter(p=>(!q||(p.c+p.n).toLowerCase().includes(q))&&(S.f==='todos'||p.s<=5)),mx=Math.max(1,...S.productos.map(p=>p.s));
+const ver=S.imp.length?`<div class="sheet"><h2>Vista previa de la importación</h2>${tbl(['Código','Nombre','Precio','Stock','Estado'],S.imp.map(x=>`<tr><td>${esc(x.c)}</td><td>${esc(x.n)}</td><td>${isNaN(x.p)?'?':fmt(x.p)}</td><td>${isNaN(x.s)?'?':x.s}</td><td class="${x.err?'bad':'okc'}">${x.err||'Listo'}</td></tr>`))}<div class="row" style="margin-top:8px"><button class="b" onclick="importar()">Importar ${S.imp.filter(x=>!x.err).length} válidos</button><button class="b o" onclick="S.imp=[];R()">Descartar</button></div></div>`:'';
+const sube=can('cat')?`<div class="sheet"><h2>Subir productos</h2><div class="drop" id="dz" ondragover="event.preventDefault();this.classList.add('hot')" ondragleave="this.classList.remove('hot')" ondrop="event.preventDefault();this.classList.remove('hot');archivo(event.dataTransfer.files[0])" onclick="document.getElementById('fi').click()">Arrastra aquí un archivo CSV o haz clic para elegirlo<br><small>Columnas: código, nombre, precio, stock (separadas por coma o punto y coma)</small></div><input id="fi" type="file" accept=".csv,.txt" hidden onchange="archivo(this.files[0])">
+<div class="row" style="margin-top:10px"><label style="flex:1">O pega las filas aquí<textarea id="pt" rows="3" placeholder="P005;Omeprazol 20 mg;1500;40"></textarea></label><button class="b o" onclick="leer(document.getElementById('pt').value)">Revisar</button></div>
+<h3 style="margin:14px 0 6px">Registrar uno solo</h3><div class="row"><label>Código<input id="pc" size="7"></label><label>Nombre<input id="pn"></label><label>Precio<input id="pp" type="number" min="0" style="width:100px"></label><label>Stock<input id="ps" type="number" min="0" style="width:80px"></label><button class="b" onclick="addProd()">Registrar</button></div></div>`:`<div class="sheet off">Tu rol (${ROLES[S.user].rol}) puede consultar el inventario, pero no subir productos.</div>`;
+return ver+`<div class="sheet"><div class="row" style="margin-bottom:12px"><label>Buscar por código o nombre<input id="q" value="${esc(S.q)}" oninput="S.q=this.value" onkeydown="if(event.key==='Enter')R()"></label><button class="b o" onclick="R()">Buscar</button><div class="chips"><button class="${S.f==='todos'?'cur':''}" onclick="S.f='todos';R()">Todos</button><button class="${S.f==='bajo'?'cur':''}" onclick="S.f='bajo';R()">Stock bajo</button></div></div>
+<div class="cards">${l.map(p=>`<div class="card"><div class="ch"><b>${esc(p.n)}</b><span>${esc(p.c)}</span></div><div class="pr">${fmt(p.p)}</div><div class="bar ${p.s<=5?'low':''}"><i style="width:${Math.round(p.s/mx*100)}%"></i></div><div>${p.s} unidades ${p.s<=5?'<span class="low">stock bajo</span>':''}</div></div>`).join('')||'<span class="off">Ningún producto coincide.</span>'}</div></div>`+sube},
+clientes:()=>`<div class="sheet"><h2>Clientes</h2>${tbl(['Cédula','Nombre','Teléfono',''],S.clientes.map(c=>`<tr><td>${esc(c.c)}</td><td>${esc(c.n)}</td><td>${esc(c.t)}</td><td class="r"><button class="b o" onclick="delCli('${esc(c.c)}')">Eliminar</button></td></tr>`))}</div><div class="sheet"><h2>Registrar cliente</h2><div class="row"><label>Cédula<input id="cc" size="10"></label><label>Nombre<input id="cn"></label><label>Teléfono<input id="ct"></label><button class="b" onclick="addCli()">Registrar</button></div></div>`,
+proveedores:()=>`<div class="sheet"><h2>Proveedores y depósitos</h2>${tbl(['Código','Nombre','Teléfono'],S.proveedores.map(p=>`<tr><td>${esc(p.c)}</td><td>${esc(p.n)}</td><td>${esc(p.t)}</td></tr>`))}</div><div class="sheet"><h2>Registrar proveedor</h2><div class="row"><label>Código<input id="dc" size="7"></label><label>Nombre<input id="dn"></label><label>Teléfono<input id="dt"></label><button class="b" onclick="addProv()">Registrar</button></div></div>`,
+compras:()=>`<div class="sheet"><h2>Nueva compra</h2><div class="row"><label>Proveedor<select id="cv">${opt(S.proveedores,x=>x.n)}</select></label><label>Producto<select id="cp">${opt(S.productos,x=>x.n)}</select></label><label>Cantidad<input id="cq" type="number" min="1" style="width:80px"></label><label>Costo unitario<input id="ck" type="number" min="1" style="width:110px"></label><button class="b o" onclick="linea('c')">Agregar línea</button></div>
+${lista('c',S.dc.map(l=>`<tr><td>${esc(P(l.c).n)}</td><td>${l.q}</td><td class="r">${fmt(l.q*l.k)}</td></tr>`),['Producto','Cantidad','Subtotal'])}
+<div class="row" style="margin-top:8px"><label>Pago<select id="cm"><option value="contado">De contado</option><option value="credito">A crédito</option></select></label><button class="b" onclick="comprar()">Registrar compra</button></div></div>
+<div class="sheet"><h2>Compras y saldos con los depósitos</h2>${tbl(['N.º','Proveedor','Detalle','Total','Saldo',''],S.compras.map(c=>`<tr><td>${c.n}</td><td>${esc(c.pv)}</td><td>${c.lin.map(l=>l.q+' × '+esc(l.n)).join(', ')}</td><td class="r">${fmt(c.t)}</td><td class="r">${c.deuda?(saldo(c)===0?'Pagada':fmt(saldo(c))):'De contado'}</td><td class="r">${c.deuda&&saldo(c)>0?`<input id="ab${c.n}" type="number" min="1" placeholder="Abono" style="width:100px"> <button class="b o" onclick="pagar(${c.n})">Abonar</button>`:''}</td></tr>`))}</div>`,
+ventas:()=>`<div class="sheet"><h2>Nueva factura</h2><div class="row"><label>Cliente<select id="vc">${opt(S.clientes,x=>x.n)}</select></label><label>Producto<select id="vp">${opt(S.productos,x=>x.n+' (stock '+x.s+')')}</select></label><label>Cantidad<input id="vq" type="number" min="1" value="1" style="width:80px"></label><button class="b o" onclick="linea('v')">Agregar</button></div>
+${lista('v',S.dv.map(l=>{const p=P(l.c);return `<tr><td>${esc(p.n)}</td><td>${l.q}</td><td class="r">${fmt(l.q*p.p)}</td></tr>`}),['Producto','Cantidad','Subtotal'])}
+<div class="row" style="margin-top:8px"><label>Medio de pago<select id="vm"><option>EFECTIVO</option><option>TRANSFERENCIA</option><option>TARJETA</option></select></label><button class="b" onclick="facturar()">Emitir factura</button></div></div>
+<div class="sheet"><h2>Facturas emitidas</h2>${tbl(['N.º','Fecha','Cliente','Detalle','Pago','Total'],S.facturas.map(f=>`<tr><td>${f.n}</td><td>${f.f}</td><td>${esc(f.cn)}</td><td>${f.lin.map(l=>l.q+' × '+esc(l.n)).join(', ')}</td><td>${f.mp}</td><td class="r">${fmt(f.t)}</td></tr>`))}</div>`};
+function R(){
+ const m=S.msg?`<p class="msg ${S.msg.ok?'ok':'bad'}" role="status">${esc(S.msg.t)}</p>`:'';
+ document.getElementById('nav').innerHTML=`<div class="brand"><b>FarmaControl</b><span>Mayos Pharmaceutical</span></div>`+(S.abierto?TABS.map(([k,l])=>`<button class="${S.tab===k?'cur':''}" onclick="go('${k}')">${l}</button>`).join('')+`<div class="who">${ROLES[S.user].nom}<span>${ROLES[S.user].rol}</span><button class="b o" style="margin-top:8px;color:#e6f2ee;border-color:#ffffff55" onclick="cerrar()">Cerrar negocio</button><button onclick="reiniciar()" style="opacity:.7;padding-left:0">Reiniciar datos</button></div>`:'');
+ document.getElementById('main').innerHTML=S.abierto?`<div class="top"><h1>${TABS.find(t=>t[0]===S.tab)[1]}</h1><span class="off">${hoy()}</span></div>`+m+V[S.tab]()+jv(S.tab)
+ :`<div class="login sheet"><h1 style="font-size:26px;margin-bottom:4px">Abrir negocio</h1><p class="off">Ingresa con tu usuario para iniciar la jornada.</p>${m}<div class="row" style="flex-direction:column;align-items:stretch"><label>Usuario<input id="u" value="maryibi"></label><label>Clave<input id="k" type="password" onkeydown="if(event.key==='Enter')entrar()"></label><button class="b" onclick="entrar()">Abrir negocio</button></div><p class="off">Demostración: maryibi (Administrador) o caja1 (Cajero), clave 1234. No uses claves reales.</p></div>`;
+ try{localStorage.setItem('fc2',JSON.stringify(S))}catch(e){}
+}
+R();
+</script></body></html>
