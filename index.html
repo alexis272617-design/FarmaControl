@@ -22,7 +22,7 @@ main{padding:24px clamp(14px,3vw,36px);max-width:1080px;width:100%}
 .kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
 .k{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:14px;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .k:hover{border-color:var(--gr)}.k small{color:var(--mu);display:block}.k b{font:600 24px Georgia,serif;font-variant-numeric:tabular-nums}
-.k.w b{color:var(--am)}
+.k.w b{color:var(--am)}.k.nb{cursor:default}.k.nb:hover{border-color:var(--ln)}
 .g2{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
 .sheet{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:16px;margin-bottom:12px}
 .sheet h2{font-size:19px;margin-bottom:10px}
@@ -147,7 +147,7 @@ consolidados:['<code>generarConsolidado(desde, hasta)</code>, <code>consolidadoD
 cierres:['<code>cerrarNegocio(fecha, efectivoContado)</code> devuelve un <code>CierreDiario</code>','<code>CierreDiario.darDiferencia()</code> = efectivo contado menos esperado','<code>buscarCierre()</code> y <code>darCierres()</code>']};
 const jv=t=>`<details><summary>Código Java detrás de esta pantalla</summary><ul>${J[t].map(x=>`<li>${x}</li>`).join('')}</ul></details>`;
 const lista=(k,rows,cols)=>tbl(cols,rows)+`<div class="row" style="margin-top:8px"><button class="b o" onclick="vaciar('${k}')">Vaciar lista</button></div>`;
-const kk=(l,v,w)=>`<div class="k ${w?'w':''}"><small>${l}</small><b>${v}</b></div>`;
+const kk=(l,v,w,a)=>a?`<button class="k ${w?'w':''}" onclick="${a}"><small>${l}</small><b>${v}</b></button>`:`<div class="k nb ${w?'w':''}"><small>${l}</small><b>${v}</b></div>`;
 function tirilla(){const f=S.facturas.find(x=>x.n===S.tir);if(!f)return'';
  const W=32,ln='-'.repeat(W),pad=(a,b)=>a+' '.repeat(Math.max(1,W-a.length-b.length))+b;
  const L=['MAYOS PHARMACEUTICAL','Factura: '+f.cod,'Fecha: '+f.f,'Cliente: '+f.cn,'Atendió: '+(f.u||'sin dato'),ln];
@@ -159,7 +159,7 @@ function tirilla(){const f=S.facturas.find(x=>x.n===S.tir);if(!f)return'';
 const V={
 resumen:()=>{const ing=S.mov.filter(m=>m.t==='ingreso').reduce((a,m)=>a+m.m,0),eg=S.mov.filter(m=>m.t==='egreso').reduce((a,m)=>a+m.m,0),deu=S.compras.filter(c=>c.deuda).reduce((a,c)=>a+saldo(c),0),bajo=S.productos.filter(p=>p.s<=5).length,vj=S.facturas.filter(f=>!f.an&&f.f===S.fJ).reduce((a,f)=>a+f.t,0);
 return `<div class="sheet"><b>Jornada del ${S.fJ}</b> abierta por ${esc(ROLES[S.user].nom)} con ${fmt(S.ap)} en la caja.</div>
-<div class="kp">${kk('Efectivo en caja',fmt(S.caja))}${kk('Ventas de la jornada',fmt(vj))}${kk('Deuda con depósitos',fmt(deu))}${kk('Productos con stock bajo',bajo,bajo)}</div>
+<div class="kp">${kk('Efectivo en caja',fmt(S.caja),0,"go('cierres')")}${kk('Ventas de la jornada',fmt(vj),0,"go('ventas')")}${kk('Deuda con depósitos',fmt(deu),0,"go('compras')")}${kk('Productos con stock bajo',bajo,bajo,"S.f='bajo';go('productos')")}</div>
 <div class="g2"><div class="sheet"><h2>Stock por producto</h2>${barras(S.productos.map(p=>({l:p.n,v:p.s,w:p.s<=5})),v=>v+' u.')}</div>
 <div class="sheet"><h2>Ingresos y egresos</h2>${barras([{l:'Ingresos',v:ing},{l:'Egresos',v:eg,w:1}],fmt)}<p class="off">Pasa el cursor sobre una barra para ver el valor.</p></div></div>
 <div class="sheet"><h2>Libro de movimientos</h2>${tbl(['N.º','Fecha','Tipo','Concepto','Monto'],S.mov.slice(0,8).map(m=>`<tr><td>${m.n}</td><td>${m.f}</td><td>${m.t}</td><td>${esc(m.c)}</td><td class="r ${m.t==='egreso'?'bad':'okc'}">${m.t==='egreso'?'−':'+'}${fmt(m.m)}</td></tr>`))}</div>`},
